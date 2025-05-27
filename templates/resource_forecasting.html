@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resource Forecasting</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <nav>
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/icu_trends">ICU Trends Analysis</a></li>
+                    <li><a href="/risk_classification">Patient Risk Classification</a></li>
+                    <li><a href="/resource_forecasting">Resource Forecasting</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <!-- ✅ Forecasting Section -->
+        <section>
+            <h2>ICU Resource Forecasting</h2>
+            <p>Predict ICU resource usage (based on ICU Demand Score trends).</p>
+            
+            <label for="forecastRange">Select Forecast Range:</label>
+            <select id="forecastRange">
+                <option value="7">Next 7 Days</option>
+                <option value="30">Next 30 Days</option>
+            </select>
+
+            <button onclick="fetchResourceForecast()">View Forecast</button>
+        </section>
+
+        <!-- ✅ Resource Forecasting Chart -->
+        <section id="forecastChartSection" class="hidden">
+            <h2>ICU Demand Forecast Chart</h2>
+            <div class="chart-container">
+                <canvas id="resourceForecastChart"></canvas>
+            </div>
+        </section>
+
+        <!-- ✅ Forecasting Data Table -->
+        <section id="forecastTableSection" class="hidden">
+            <h2>ICU Demand Forecast Data</h2>
+            <table border="1">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Total ICU Demand</th>
+                        <th>Estimated Beds Required</th>
+                    </tr>
+                </thead>
+                <tbody id="forecastTableBody"></tbody>
+            </table>
+        </section>
+
+        <footer>
+            <p>&copy; 2025 ICU Prediction System | All Rights Reserved</p>
+        </footer>
+    </div>
+
+    <script>
+        let forecastChartInstance = null;
+
+        async function fetchResourceForecast() {
+            const range = document.getElementById("forecastRange").value;
+
+            try {
+                const response = await fetch(`/api/get_resource_forecast?range=${range}`);
+                const forecastData = await response.json();
+
+                if (!forecastData || forecastData.length === 0) {
+                    alert("No forecasting data available for the selected range.");
+                    return;
+                }
+
+                document.getElementById("forecastChartSection").classList.remove("hidden");
+                document.getElementById("forecastTableSection").classList.remove("hidden");
+
+                const dates = forecastData.map(data => data.date);
+                const icuDemand = forecastData.map(data => data.Total_ICU_Demand);
+                const beds = forecastData.map(data => data.Beds_Required);
+
+                renderForecastChart(dates, beds);
+                renderForecastTable(forecastData);
+            } catch (error) {
+                alert("Error fetching forecasting data.");
+                console.error(error);
+            }
+        }
+
+        function renderForecastChart(dates, beds) {
+            const ctx = document.getElementById("resourceForecastChart").getContext("2d");
+
+            if (forecastChartInstance !== null) {
+                forecastChartInstance.destroy();
+            }
+
+            forecastChartInstance = new Chart(ctx, {
+                type: "bar",
+                data: {
+                    labels: dates,
+                    datasets: [
+                        { label: "Estimated ICU Beds", data: beds, backgroundColor: "#0984e3" }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: { beginAtZero: true }
+                    }
+                }
+            });
+        }
+
+        function renderForecastTable(data) {
+            let tableBody = document.getElementById("forecastTableBody");
+            tableBody.innerHTML = "";
+
+            data.forEach(row => {
+                let tableRow = `<tr>
+                    <td>${row.date}</td>
+                    <td>${row.Total_ICU_Demand.toFixed(2)}</td>
+                    <td>${row.Beds_Required}</td>
+                </tr>`;
+                tableBody.innerHTML += tableRow;
+            });
+        }
+    </script>
+
+</body>
+</html>

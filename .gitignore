@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.env
+*.db
+.DS_Store
+.ipynb_checkpoints
+*.csv
+*.pkl
+*.zip
+*.ipynb

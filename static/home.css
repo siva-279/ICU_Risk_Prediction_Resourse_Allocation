@@ -1,0 +1,72 @@
+/* ✅ Hide Initially */
+.hidden {
+    display: none;
+}
+
+/* ✅ Center and Resize Pie Chart */
+.chart-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 300px;
+    margin-top: 20px;
+}
+
+#riskChart {
+    width: 300px !important;
+    height: 300px !important;
+    max-width: 300px;
+    max-height: 300px;
+}
+
+/* ✅ Table Styling */
+#patientTable {
+    width: 50%;
+    margin: 20px auto;
+    border-collapse: collapse;
+    text-align: center;
+}
+#patientTable th, #patientTable td {
+    padding: 10px;
+    border: 1px solid #ddd;
+}
+
+/* ✅ Patient Summary Cards */
+.summary-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.summary-card {
+    padding: 15px;
+    border-radius: 8px;
+    font-size: 1.2em;
+    font-weight: bold;
+    color: white;
+    text-align: center;
+    width: 150px;
+}
+
+.low-risk { background-color: blue; }
+.medium-risk { background-color: orange; }
+.high-risk { background-color: red; }
+.avg-score { background-color: purple; }
+
+/* ✅ Search Box & Button */
+#patient_id {
+    display: block;
+    margin: 10px auto;
+    padding: 8px;
+    width: 50%;
+    text-align: center;
+    font-size: 1.1em;
+}
+button {
+    display: block;
+    margin: 10px auto;
+    padding: 10px 15px;
+    font-size: 1.1em;
+}

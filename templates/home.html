@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ICU Risk Prediction</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .risk.low { color: green; font-weight: bold; }
+        .risk.medium { color: orange; font-weight: bold; }
+        .risk.high { color: red; font-weight: bold; }
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/icu_trends">ICU Trends Analysis</a></li>
+            <li><a href="/risk_classification">Patient Risk Classification</a></li>
+            <li><a href="/resource_forecasting">Resource Forecasting</a></li>
+        </ul>
+    </nav>
+
+    <header>
+        <h1>Welcome to the ICU Risk Prediction System</h1>
+        <p>Analyze and predict ICU admission risks based on real patient data using ML-based scoring.</p>
+    </header>
+
+    <section id="patientSummary">
+        <h2>ICU Patient Summary</h2>
+        <div class="summary-container">
+            <div class="summary-card low-risk">Low Risk: <span id="lowRiskCount">0</span></div>
+            <div class="summary-card medium-risk">Medium Risk: <span id="mediumRiskCount">0</span></div>
+            <div class="summary-card high-risk">High Risk: <span id="highRiskCount">0</span></div>
+            <div class="summary-card avg-score">Avg Risk Score: <span id="avgRiskScore">0.00</span></div>
+            <div class="summary-card updated-at">Last Updated: <span id="lastUpdated"></span></div>
+        </div>
+    </section>
+
+    <section>
+        <h2>Search Patient ICU Risk</h2>
+        <input type="text" id="patient_input" placeholder="Enter Patient ID or First Name">
+        <button onclick="searchPatient()">Search</button>
+    </section>
+
+    <section id="patientDetailsSection" class="hidden">
+        <h2 id="searchedPatientTitle" class="hidden">Searched Patient Details</h2>
+        <table border="1" id="patientDetailsTable">
+            <thead id="tableHeader" class="hidden">
+                <tr>
+                    <th>Patient ID</th>
+                    <th>First Name</th>
+                    <th>Age</th>
+                    <th>ICU Risk Score</th>
+                    <th>Risk Category</th>
+                </tr>
+            </thead>
+            <tbody id="patientDetailsBody"></tbody>
+        </table>
+    </section>
+
+    <section>
+        <h2>Live ICU Risk Distribution</h2>
+        <p>Total Patients: <span id="totalPatients">0</span></p>
+        <div class="chart-container">
+            <canvas id="riskChart"></canvas>
+        </div>
+    </section>
+
+    <script>
+        let patientData = [];
+
+        async function fetchRiskData() {
+            const response = await fetch('/api/get_risk_data');
+            patientData = await response.json();
+
+            document.getElementById("totalPatients").textContent = patientData.length;
+            document.getElementById("lastUpdated").textContent = new Date().toLocaleString();
+
+            let riskCounts = { "Low": 0, "Medium": 0, "High": 0 };
+            let totalRiskScore = 0;
+
+            patientData.forEach(patient => {
+                const score = parseFloat(patient.Risk_Score);
+                totalRiskScore += score;
+                riskCounts[patient.Final_Risk_Category]++;
+            });
+
+            document.getElementById("lowRiskCount").innerText = riskCounts["Low"];
+            document.getElementById("mediumRiskCount").innerText = riskCounts["Medium"];
+            document.getElementById("highRiskCount").innerText = riskCounts["High"];
+            document.getElementById("avgRiskScore").innerText = (totalRiskScore / patientData.length).toFixed(2);
+
+            renderChart(riskCounts);
+        }
+
+        function searchPatient(fromStorage = false) {
+            const input = document.getElementById("patient_input");
+            const searchValue = fromStorage ? localStorage.getItem("lastSearch") : input.value.trim().toLowerCase();
+            if (!searchValue) return;
+
+            if (!fromStorage) {
+                localStorage.setItem("lastSearch", searchValue);
+            }
+
+            const filteredData = patientData.filter(p =>
+                p.PATIENT.toLowerCase() === searchValue || (p.FIRST_NAME && p.FIRST_NAME.toLowerCase() === searchValue)
+            );
+
+            const tableBody = document.getElementById("patientDetailsBody");
+            tableBody.innerHTML = "";
+
+            if (filteredData.length > 0) {
+                filteredData.forEach(p => {
+                    const riskClass = p.Final_Risk_Category.toLowerCase();
+                    const row = `<tr>
+                        <td>${p.PATIENT}</td>
+                        <td>${p.FIRST_NAME ?? 'N/A'}</td>
+                        <td>${p.AGE ?? 'N/A'}</td>
+                        <td>${parseFloat(p.Risk_Score).toFixed(2)}</td>
+                        <td class="risk ${riskClass}">${p.Final_Risk_Category}</td>
+                    </tr>`;
+                    tableBody.innerHTML += row;
+                });
+                document.getElementById("patientDetailsSection").classList.remove("hidden");
+                document.getElementById("tableHeader").classList.remove("hidden");
+                document.getElementById("searchedPatientTitle").classList.remove("hidden");
+                document.getElementById("searchedPatientTitle").innerText = "Searched Patient Details";
+            } else {
+                alert("Patient ID or name not found!");
+                document.getElementById("patientDetailsSection").classList.add("hidden");
+                document.getElementById("tableHeader").classList.add("hidden");
+                document.getElementById("searchedPatientTitle").classList.add("hidden");
+            }
+        }
+
+        function scrollToRiskCategory(category) {
+            const topPatients = [...patientData]
+                .filter(p => p.Final_Risk_Category === category)
+                .sort((a, b) => b.Risk_Score - a.Risk_Score)
+                .slice(0, 10);
+
+            const tableBody = document.getElementById("patientDetailsBody");
+            tableBody.innerHTML = "";
+
+            if (topPatients.length > 0) {
+                topPatients.forEach(p => {
+                    const riskClass = p.Final_Risk_Category.toLowerCase();
+                    const row = `<tr>
+                        <td>${p.PATIENT}</td>
+                        <td>${p.FIRST_NAME ?? 'N/A'}</td>
+                        <td>${p.AGE ?? 'N/A'}</td>
+                        <td>${parseFloat(p.Risk_Score).toFixed(2)}</td>
+                        <td class="risk ${riskClass}">${p.Final_Risk_Category}</td>
+                    </tr>`;
+                    tableBody.innerHTML += row;
+                });
+                document.getElementById("patientDetailsSection").classList.remove("hidden");
+                document.getElementById("tableHeader").classList.remove("hidden");
+                document.getElementById("searchedPatientTitle").classList.remove("hidden");
+                document.getElementById("searchedPatientTitle").innerText = `Top 10 ${category} Risk Patients`;
+
+                setTimeout(() => {
+                    document.getElementById("patientDetailsSection").scrollIntoView({ behavior: 'smooth' });
+                }, 300);
+            } else {
+                alert(`No ${category} risk patients found.`);
+            }
+        }
+
+        function renderChart(riskCounts) {
+            const ctx = document.getElementById("riskChart").getContext("2d");
+            new Chart(ctx, {
+                type: "pie",
+                data: {
+                    labels: ["Low", "Medium", "High"],
+                    datasets: [{
+                        data: [riskCounts["Low"], riskCounts["Medium"], riskCounts["High"]],
+                        backgroundColor: ["#00b894", "#fdcb6e", "#d63031"]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    onClick: (e, elements) => {
+                        if (elements.length > 0) {
+                            const index = elements[0].index;
+                            const category = ["Low", "Medium", "High"][index];
+                            scrollToRiskCategory(category);
+                        }
+                    }
+                }
+            });
+        }
+
+        window.onload = function () {
+            fetchRiskData();
+        };
+    </script>
+</body>
+</html>

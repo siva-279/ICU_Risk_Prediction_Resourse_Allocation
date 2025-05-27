@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Risk Classification</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .chart-container {
+            width: 80%;
+            max-width: 700px;
+            margin: 30px auto;
+        }
+        table {
+            width: 90%;
+            margin: 20px auto;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid #ccc;
+        }
+        th, td {
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            background-color: #f4f4f4;
+            cursor: pointer;
+        }
+        #searchBox {
+            width: 250px;
+            padding: 6px;
+            margin-top: 10px;
+        }
+        #pagination {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+        }
+        #pagination button {
+            margin: 3px;
+            padding: 8px 12px;
+            background-color: #0984e3;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        #pagination button.active {
+            background-color: #74b9ff;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/icu_trends">ICU Trends Analysis</a></li>
+            <li><a href="/risk_classification">Patient Risk Classification</a></li>
+            <li><a href="/resource_forecasting">Resource Forecasting</a></li>
+        </ul>
+    </nav>
+
+    <header style="text-align: center; margin-top: 20px;">
+        <h1>Risk Classification Overview</h1>
+        <p>This page displays the classification of patients into Low, Medium, and High Risk based on clinical indicators.</p>
+        <button onclick="fetchRiskData()">Load Risk Data</button>
+    </header>
+
+    <div class="chart-container" id="chartContainer" style="display: none;">
+        <canvas id="riskChart"></canvas>
+    </div>
+
+    <section style="text-align: center;">
+        <input type="text" id="searchBox" placeholder="Enter Patient ID">
+        <button onclick="searchPatient()">Search</button>
+    </section>
+
+    <section id="tableSection" style="display: none;">
+        <table>
+            <thead>
+                <tr>
+                    <th>Patient ID</th>
+                    <th>ICU Risk Score</th>
+                    <th>Risk Category</th>
+                </tr>
+            </thead>
+            <tbody id="riskTableBody">
+                <!-- Dynamic rows -->
+            </tbody>
+        </table>
+        <div id="pagination"></div>
+    </section>
+
+    <script>
+        let currentPage = 1;
+        const rowsPerPage = 25;
+        let allData = [];
+
+        async function fetchRiskData() {
+            const response = await fetch('/api/get_risk_data');
+            allData = await response.json();
+            if (allData.length > 0) {
+                document.getElementById("chartContainer").style.display = "block";
+                document.getElementById("tableSection").style.display = "block";
+                renderChart(getRiskCounts());
+                renderPagination();
+                renderTable(currentPage);
+            }
+        }
+
+        function renderTable(page, filteredData = null) {
+            let dataToRender = filteredData || allData;
+            let tableBody = document.getElementById("riskTableBody");
+            tableBody.innerHTML = "";
+
+            let start = (page - 1) * rowsPerPage;
+            let end = start + rowsPerPage;
+            let paginatedItems = dataToRender.slice(start, end);
+
+            paginatedItems.forEach(patient => {
+                let row = `<tr>
+                    <td>${patient.PATIENT}</td>
+                    <td>${parseFloat(patient.Risk_Score).toFixed(2)}</td>
+                    <td>${patient.Final_Risk_Category}</td>
+                </tr>`;
+                tableBody.innerHTML += row;
+            });
+        }
+
+        function renderPagination() {
+            let paginationDiv = document.getElementById("pagination");
+            paginationDiv.innerHTML = "";
+            let totalPages = Math.ceil(allData.length / rowsPerPage);
+
+            let displayRange = 3;
+            let startPage = Math.max(1, currentPage - displayRange);
+            let endPage = Math.min(totalPages, currentPage + displayRange);
+
+            if (startPage > 1) {
+                paginationDiv.innerHTML += '<button onclick="changePage(1)">1</button>';
+                if (startPage > 2) paginationDiv.innerHTML += '<span style="padding:0 5px;">...</span>';
+            }
+
+            for (let i = startPage; i <= endPage; i++) {
+                paginationDiv.innerHTML += `<button class="${i === currentPage ? 'active' : ''}" onclick="changePage(${i})">${i}</button>`;
+            }
+
+            if (endPage < totalPages) {
+                if (endPage < totalPages - 1) paginationDiv.innerHTML += '<span style="padding:0 5px;">...</span>';
+                paginationDiv.innerHTML += `<button onclick="changePage(${totalPages})">${totalPages}</button>`;
+            }
+        }
+
+        function changePage(page) {
+            currentPage = page;
+            renderTable(currentPage);
+            renderPagination();
+        }
+
+        function getRiskCounts() {
+            let counts = { "Low": 0, "Medium": 0, "High": 0 };
+            allData.forEach(p => {
+                const category = (p.Final_Risk_Category || '').toLowerCase();
+                if (category.includes('low')) counts.Low++;
+                else if (category.includes('medium')) counts.Medium++;
+                else if (category.includes('high')) counts.High++;
+            });
+            return counts;
+        }
+
+        function renderChart(riskCounts) {
+            const ctx = document.getElementById("riskChart").getContext("2d");
+            new Chart(ctx, {
+                type: "bar",
+                data: {
+                    labels: ["Low", "Medium", "High"],
+                    datasets: [{
+                        label: "Number of Patients",
+                        data: [riskCounts.Low, riskCounts.Medium, riskCounts.High],
+                        backgroundColor: ["#00b894", "#fdcb6e", "#d63031"]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        function searchPatient() {
+            const value = document.getElementById("searchBox").value.trim().toLowerCase();
+            const filtered = allData.filter(p => p.PATIENT.toLowerCase().includes(value));
+            currentPage = 1;
+            renderTable(currentPage, filtered);
+        }
+    </script>
+</body>
+</html>

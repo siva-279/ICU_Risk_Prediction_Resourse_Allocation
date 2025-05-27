@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ICU Trends Analysis</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .chart-container {
+            width: 100%;
+            max-width: 900px;
+            height: 400px;
+            margin: auto;
+        }
+        nav ul {
+            display: flex;
+            gap: 20px;
+            list-style-type: none;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/icu_trends">ICU Trends Analysis</a></li>
+            <li><a href="/risk_classification">Patient Risk Classification</a></li>
+            <li><a href="/resource_forecasting">Resource Forecasting</a></li>
+        </ul>
+    </nav>
+
+    <header>
+        <h1>ICU Trends Analysis</h1>
+        <p>Explore how ICU admissions evolve over time based on patient condition groups.</p>
+    </header>
+
+    <section>
+        <form method="GET" action="/icu_trends">
+            <label for="group">Select Condition Group:</label>
+            <select id="group" name="group">
+                <option value="All" {% if selected_group == "All" %}selected{% endif %}>All</option>
+                <option value="Respiratory Disorders" {% if selected_group == "Respiratory Disorders" %}selected{% endif %}>Respiratory Disorders</option>
+                <option value="Chronic Health Issues" {% if selected_group == "Chronic Health Issues" %}selected{% endif %}>Chronic Health Issues</option>
+                <option value="Psychosocial Factors" {% if selected_group == "Psychosocial Factors" %}selected{% endif %}>Psychosocial Factors</option>
+            </select>
+
+            <label for="days">Select Time Range (days):</label>
+            <input type="number" id="days" name="days" min="1" max="365" value="{{ selected_days or 365 }}">
+
+            <button type="submit">Apply Filter</button>
+        </form>
+    </section>
+
+    {% if trend_data %}
+    <section>
+        <h2>ICU Admissions – {{ selected_group }} (Last {{ selected_days }} Days)</h2>
+        <p>Total Patients: <strong>{{ total_patients }}</strong></p>
+
+        <div class="chart-container">
+            <canvas id="trendChart"></canvas>
+        </div>
+    </section>
+
+    <script>
+        const labels = {{ labels | tojson }};
+        const values = {{ values | tojson }};
+
+        const ctx = document.getElementById("trendChart").getContext("2d");
+        new Chart(ctx, {
+            type: "bar",
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: "ICU Admissions",
+                    data: values,
+                    backgroundColor: "#0984e3"
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: { precision: 0 }
+                    }
+                }
+            }
+        });
+    </script>
+    {% else %}
+    <section>
+        <h2>No data available for the selected filters.</h2>
+        <p>Try adjusting the date range or condition group.</p>
+    </section>
+    {% endif %}
+</body>
+</html>
