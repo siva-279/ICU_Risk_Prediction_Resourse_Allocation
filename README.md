@@ -115,19 +115,17 @@ python app.py
 ## Screenshots
 
 ### Home Page
-<img src="screenshots/Home.png" width="600"/>
+![Home Page](screenshots/Home.png)
 
 ### Risk Classification Page
-<img src="screenshots/Risk_Classification.png" width="600"/>
+![Risk Classification](screenshots/Risk_Classification.png)
 
 ### ICU Trends Page
-<img src="screenshots/ICU_Trends.png" width="600"/>
+![ICU Trends](screenshots/ICU_Trends.png)
 
 ### Forecasting Page
-<img src="screenshots/Resource_Forecasting.png" width="600"/>
+![Forecasting](screenshots/Resource_Forecasting.png)
 
-
----
 
 ---
 
@@ -137,7 +135,7 @@ python app.py
 
 **Siva Sava**
 
-- [LinkedIn](https://www.linkedin.com/in/sivasava)
+- [LinkedIn](https://www.linkedin.com/in/sivasava)  
 - savasivakumar271200@gmail.com
 
 
