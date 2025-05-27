@@ -51,8 +51,7 @@ Where:
 - **M**: Medications & Procedures Score  
 - **E**: Encounter History Score
 
-The weights `w₁` through `w₆` were assigned based on **clinical scoring systems and published ICU triage literature** to reflect real patient severity and risk patterns.
-
+Weights were assigned based on **clinical scoring systems and ICU triage literature**.
 
 ---
 
@@ -64,77 +63,67 @@ Where:
 - **α₁**, **α₂**: Weights for cost vs. urgency  
 - **β₁**: Multiplier for emergency burden
 
-This BRU formula is modeled on **ICU cost and urgency estimation frameworks**, mimicking how hospitals estimate demand pressure.
+This formula reflects **resource burden estimation** used in ICU planning.
 
 ---
 
 ## Data Sources
 
-Data was generated using **[Synthea](https://synthetichealth.github.io/synthea/)** – a tool that simulates realistic but synthetic electronic health records.
+Data was generated using **[Synthea](https://synthetichealth.github.io/synthea/)** – a synthetic health record simulator.
 
 ### Files used:
 
-- `patients.csv`  
-- `observations.csv`  
-- `conditions.csv`  
-- `medications.csv`  
-- `procedures.csv`  
+- `patients.csv`
+- `observations.csv`
+- `conditions.csv`
+- `medications.csv`
+- `procedures.csv`
 - `encounters.csv`
 
-All datasets are hosted externally due to GitHub size limits:  
-🔗 [Access via Google Drive]https://drive.google.com/drive/folders/1fzN-hZqPjJudntMW8kggDMrAHszBdNim?usp=drive_link
+Due to size constraints, datasets are stored externally:  
+[Access via Google Drive](https://drive.google.com/drive/folders/1fzN-hZqPjJudntMW8kggDMrAHszBdNim?usp=drive_link)
 
 ---
 
 ## Pipeline Overview
 
-1. **Data Cleaning**  
-   Removed deceased and age > 100  
-2. **Feature Engineering**  
-   Aggregated vitals, labs, encounters, and conditions  
-3. **Manual Scoring**  
-   Computed Risk Score and BRU using clinically weighted formulas  
-4. **ML Modeling**  
-   Linear & Logistic regression for predictions  
-5. **Visualization**  
-   Flask-based web interface for interaction
+1. **Data Cleaning** – Removed deceased patients & those >100 years
+2. **Feature Engineering** – Aggregated clinical factors
+3. **Manual Scoring** – Risk Score + BRU
+4. **Modeling** – Logistic/Linear Regression
+5. **Deployment** – Flask GUI
 
 ---
 
 ## Run Locally
 
 ```bash
-git clone https://github.com/siva-279/icu-risk-prediction.git
-cd icu-risk-prediction
+git clone https://github.com/siva-279/ICU_Risk_Prediction_Resourse_Allocation.git
+cd ICU_Risk_Prediction_Resourse_Allocation
 pip install -r requirements.txt
 python app.py
-
+```
 
 ---
 
- 
-## 📸 Screenshots
+## Screenshots
 
-### 🏠 Home Page  
+### Home Page  
 ![Home Page](https://raw.githubusercontent.com/siva-279/ICU_Risk_Prediction_Resourse_Allocation/main/screenshots/Home.png)
 
-### 📊 Risk Classification Page  
+### Risk Classification Page  
 ![Risk Classification](https://raw.githubusercontent.com/siva-279/ICU_Risk_Prediction_Resourse_Allocation/main/screenshots/Risk_Classification.png)
 
-### 📈 ICU Trends Page  
+### ICU Trends Page  
 ![ICU Trends](https://raw.githubusercontent.com/siva-279/ICU_Risk_Prediction_Resourse_Allocation/main/screenshots/ICU_Trends.png)
 
-### 📉 Forecasting Page  
+### Forecasting Page  
 ![Forecasting](https://raw.githubusercontent.com/siva-279/ICU_Risk_Prediction_Resourse_Allocation/main/screenshots/Resource_Forecasting.png)
-
-
----
 
 ---
 
 ## Author
 
-**Siva Sava**
-
-- [LinkedIn Profile](https://www.linkedin.com/in/sivasava)
-- [savasivakumar271200@gmail.com](mailto:savasivakumar271200@gmail.com)
+**Siva Sava**  
+[LinkedIn Profile](https://www.linkedin.com/in/sivasava)  
+[savasivakumar271200@gmail.com](mailto:savasivakumar271200@gmail.com)
