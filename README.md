@@ -112,24 +112,21 @@ python app.py
 
 ---
 
-## Screenshots
+ 
+## Screenshots (Click to View)
 
-### Home Page  
-<img src="screenshots/Home.png" width="700" alt="Home Page">
+- [Home Page](https://github.com/siva-279/ICU_Risk_Prediction_Resourse_Allocation/blob/main/screenshots/Home.png)
+- [Risk Classification Page](https://github.com/siva-279/ICU_Risk_Prediction_Resourse_Allocation/blob/main/screenshots/Risk_Classification.png)
+- [ICU Trends Page](https://github.com/siva-279/ICU_Risk_Prediction_Resourse_Allocation/blob/main/screenshots/ICU_Trends.png)
+- [Forecasting Page](https://github.com/siva-279/ICU_Risk_Prediction_Resourse_Allocation/blob/main/screenshots/Resource_Forecasting.png)
 
-### Risk Classification Page  
-<img src="screenshots/Risk_Classification.png" width="700" alt="Risk Classification">
-
-### ICU Trends Page  
-<img src="screenshots/ICU_Trends.png" width="700" alt="ICU Trends">
-
-### Forecasting Page  
-<img src="screenshots/Resource_Forecasting.png" width="700" alt="Forecasting">
+---
 
 ---
 
 ## Author
 
-<strong>Siva Sava</strong><br>
-<a href="https://www.linkedin.com/in/sivasava" target="_blank">LinkedIn</a><br>
-savasivakumar271200@gmail.com
+**Siva Sava**
+
+- [LinkedIn Profile](https://www.linkedin.com/in/sivasava)
+- [savasivakumar271200@gmail.com](mailto:savasivakumar271200@gmail.com)
