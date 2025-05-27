@@ -124,13 +124,18 @@ python app.py
 ![ICU Trends](screenshots/ICU_Trends.png)
 
 ### Forecasting Page
-![Forecasting](screenshots/Resourse_Forecasting.png)
+![Forecasting](screenshots/Resource_Forecasting.png)
+
+
+---
 
 ---
 
 ## Author
 
-**Siva Sava**  
-📫 [LinkedIn](www.linkedin.com/in/sivasava)  
-📧 savasivakumar271200@gmail.com
+**Siva Sava**
+
+- [LinkedIn](https://www.linkedin.com/in/sivasava)  
+- savasivakumar271200@gmail.com
+
 
