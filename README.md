@@ -115,7 +115,7 @@ python app.py
 ## Screenshots
 
 ### Home Page
-![Home Page]screenshots/Home.png
+[Home Page](screenshots/Home.png)
 
 ### Risk Classification Page
 ![Risk Classification]screenshots/Risk_Classification.png
