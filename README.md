@@ -41,29 +41,30 @@ Built using **Python**, **Flask**, and **scikit-learn**, this system simulates a
 
 ## Risk Score Formula (Manually Weighted)
 
-\[
-\text{Risk Score} = w_1A + w_2V + w_3L + w_4C + w_5M + w_6E
-\]
+**Risk Score = w₁·A + w₂·V + w₃·L + w₄·C + w₅·M + w₆·E**
 
 Where:
-- `A`: Normalized Age  
-- `V`: Vital Signs Score  
-- `L`: Lab Results Score  
-- `C`: Comorbidity Score  
-- `M`: Medications & Procedures Score  
-- `E`: Encounter Score
+- **A**: Normalized Age  
+- **V**: Vital Signs Score  
+- **L**: Lab Results Score  
+- **C**: Comorbidity Score  
+- **M**: Medications & Procedures Score  
+- **E**: Encounter History Score
 
-> Weights were based on clinical references like **NEWS2**, **Charlson Index**, and ICU triage protocols.
+The weights `w₁` through `w₆` were assigned based on **clinical scoring systems and published ICU triage literature** to reflect real patient severity and risk patterns.
+
 
 ---
 
 ## Base Resource Unit (BRU) Formula
 
-\[
-BRU = \alpha_1 \cdot (\text{Base Encounter Cost} + \text{Procedure Cost} + \text{Medication Cost}) + \alpha_2 \cdot (\beta_1 \cdot \text{Emergency Visits})
-\]
+**BRU = α₁·(Base Encounter Cost + Procedure Cost + Medication Cost) + α₂·(β₁·Emergency Visits)**
 
-> Designed to reflect cost burden and urgency. Used for forecasting ICU resource load.
+Where:
+- **α₁**, **α₂**: Weights for cost vs. urgency  
+- **β₁**: Multiplier for emergency burden
+
+This BRU formula is modeled on **ICU cost and urgency estimation frameworks**, mimicking how hospitals estimate demand pressure.
 
 ---
 
@@ -107,3 +108,29 @@ git clone https://github.com/siva-279/icu-risk-prediction.git
 cd icu-risk-prediction
 pip install -r requirements.txt
 python app.py
+
+
+---
+
+## Screenshots
+
+### Home Page
+![Home Page](screenshots/Home.png)
+
+### Risk Classification Page
+![Risk Classification](screenshots/Risk_Classification.png)
+
+### ICU Trends Page
+![ICU Trends](screenshots/ICU_Trends.png)
+
+### Forecasting Page
+![Forecasting](screenshots/Resourse_Forecasting.png)
+
+---
+
+## Author
+
+**Siva Sava**  
+📫 [LinkedIn](www.linkedin.com/in/sivasava)  
+📧 savasivakumar271200@gmail.com
+
