@@ -127,6 +127,7 @@ python app.py
 ### 📉 Forecasting Page  
 ![Forecasting](https://raw.githubusercontent.com/siva-279/ICU_Risk_Prediction_Resourse_Allocation/main/screenshots/Resource_Forecasting.png)
 
+
 ---
 
 ---
