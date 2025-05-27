@@ -118,7 +118,7 @@ python app.py
 ![ICU Trends](https://raw.githubusercontent.com/siva-279/ICU_Risk_Prediction_Resourse_Allocation/main/screenshots/ICU_Trends.png)
 
 ### Forecasting Page  
-![Forecasting](https://raw.githubusercontent.com/siva-279/ICU_Risk_Prediction_Resourse_Allocation/main/screenshots/Resource_Forecasting.png)
+![Forecasting](https://raw.githubusercontent.com/siva-279/ICU_Risk_Prediction_Resourse_Allocation/main/screenshots/Resourse_Forecasting.png)
 
 ---
 
