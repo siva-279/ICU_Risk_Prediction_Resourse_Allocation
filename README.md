@@ -126,16 +126,12 @@ python app.py
 ### Forecasting Page
 ![Forecasting](screenshots/Resource_Forecasting.png)
 
-
----
-
 ---
 
 ## Author
 
 **Siva Sava**
 
-- [LinkedIn](https://www.linkedin.com/in/sivasava)  
-- savasivakumar271200@gmail.com
-
+-  [LinkedIn](https://www.linkedin.com/in/sivasava)
+-  savasivakumar271200@gmail.com
 
