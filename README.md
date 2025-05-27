@@ -113,12 +113,19 @@ python app.py
 ---
 
  
-## Screenshots (Click to View)
+## 📸 Screenshots
 
-- [Home Page](https://github.com/siva-279/ICU_Risk_Prediction_Resourse_Allocation/blob/main/screenshots/Home.png)
-- [Risk Classification Page](https://github.com/siva-279/ICU_Risk_Prediction_Resourse_Allocation/blob/main/screenshots/Risk_Classification.png)
-- [ICU Trends Page](https://github.com/siva-279/ICU_Risk_Prediction_Resourse_Allocation/blob/main/screenshots/ICU_Trends.png)
-- [Forecasting Page](https://github.com/siva-279/ICU_Risk_Prediction_Resourse_Allocation/blob/main/screenshots/Resource_Forecasting.png)
+### 🏠 Home Page  
+![Home Page](https://raw.githubusercontent.com/siva-279/ICU_Risk_Prediction_Resourse_Allocation/main/screenshots/Home.png)
+
+### 📊 Risk Classification Page  
+![Risk Classification](https://raw.githubusercontent.com/siva-279/ICU_Risk_Prediction_Resourse_Allocation/main/screenshots/Risk_Classification.png)
+
+### 📈 ICU Trends Page  
+![ICU Trends](https://raw.githubusercontent.com/siva-279/ICU_Risk_Prediction_Resourse_Allocation/main/screenshots/ICU_Trends.png)
+
+### 📉 Forecasting Page  
+![Forecasting](https://raw.githubusercontent.com/siva-279/ICU_Risk_Prediction_Resourse_Allocation/main/screenshots/Resource_Forecasting.png)
 
 ---
 
