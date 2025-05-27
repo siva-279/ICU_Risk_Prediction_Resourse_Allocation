@@ -112,19 +112,20 @@ python app.py
 
 ---
 
-## Screenshots
+## 📸 Screenshots
 
-### Home Page
-![Home Page](screenshots/Home.png)
+### Home Page  
+<img src="screenshots/Home.png" width="700"/>
 
-### Risk Classification Page
-![Risk Classification](screenshots/Risk_Classification.png)
+### Risk Classification Page  
+<img src="screenshots/Risk_Classification.png" width="700"/>
 
-### ICU Trends Page
-![ICU Trends](screenshots/ICU_Trends.png)
+### ICU Trends Page  
+<img src="screenshots/ICU_Trends.png" width="700"/>
 
-### Forecasting Page
-![Forecasting](screenshots/Resource_Forecasting.png)
+### Forecasting Page  
+<img src="screenshots/Resource_Forecasting.png" width="700"/>
+
 
 ---
 
